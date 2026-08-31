@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Play, RotateCcw, ShieldCheck, Sparkles, Target } from "lucide-react";
+import { Play, RotateCcw, ShieldCheck, Sparkles, Target, Zap } from "lucide-react";
+import appleLogo from "@/assets/logo-apple-game.png";
 import appleArt from "@/assets/art-apple.png";
 import rottenArt from "@/assets/art-rotten.png";
 import { DragonMark, Particles, TopBar } from "@/components/vip/Chrome";
@@ -70,13 +71,14 @@ function ApplePage() {
   };
 
   const order = Array.from({ length: ROWS }, (_, i) => ROWS - 1 - i);
+  const progress = Math.round((revealed / ROWS) * 100);
 
   return (
-    <main className="page-bg screen-frame relative min-h-screen pb-10">
+    <main dir="ltr" className="page-bg screen-frame relative min-h-screen pb-10 text-left">
       <Particles />
       <div className="relative z-10">
         <TopBar
-          title="كاشف التفاحة"
+          title="Apple Predictor"
           right={
             <span className="block truncate rounded-lg border border-border bg-secondary/60 px-2 py-1 text-[9px] text-muted-foreground">
               ID: {userId}
@@ -89,7 +91,7 @@ function ApplePage() {
           <div className="card-elite animate-rise relative mb-4 overflow-hidden rounded-[28px] p-4">
             <span
               aria-hidden
-              className="animate-breathe pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-primary/25 blur-3xl"
+              className="animate-breathe pointer-events-none absolute -left-12 -top-12 h-40 w-40 rounded-full bg-primary/25 blur-3xl"
             />
             <span
               aria-hidden
@@ -103,35 +105,56 @@ function ApplePage() {
               <div className="relative flex h-16 w-16 shrink-0 items-center justify-center">
                 <span className="ring-conic animate-spin-slow absolute inset-0 rounded-full opacity-70" />
                 <img
-                  src={appleArt}
-                  alt="لعبة التفاحة"
+                  src={appleLogo}
+                  alt="Apple of Fortune"
                   width={768}
                   height={768}
                   className="animate-breathe relative h-12 w-12 object-contain drop-shadow-[0_0_18px_var(--primary-glow)]"
                 />
               </div>
-              <div className="min-w-0 flex-1 text-right">
-                <p className="flex items-center justify-end gap-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-primary">
-                  Predictor <Sparkles className="h-3.5 w-3.5" />
+              <div className="min-w-0 flex-1">
+                <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-primary">
+                  <Sparkles className="h-3.5 w-3.5" /> Predictor
                 </p>
-                <h1 className="neon-text mt-0.5 truncate text-xl font-extrabold">لعبة التفاحة</h1>
-                <p className="text-[10px] text-muted-foreground">Apple of Fortune</p>
+                <h1 className="neon-text mt-0.5 truncate text-xl font-extrabold">
+                  Apple of Fortune
+                </h1>
+                <p className="text-[10px] text-muted-foreground">Safe cells detector</p>
               </div>
               <span className="shrink-0 rounded-full border border-primary/50 bg-primary/10 px-3 py-1 text-[10px] font-bold text-primary">
                 {PLATFORM.name}
               </span>
             </div>
+
+            {/* progress */}
+            <div className="relative mt-4">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-primary/10">
+                <div
+                  className="h-full rounded-full transition-[width] duration-300"
+                  style={{
+                    width: `${progress}%`,
+                    backgroundImage: "var(--gradient-primary)",
+                    boxShadow: "var(--glow-sm)",
+                  }}
+                />
+              </div>
+              <div className="mt-2 flex items-center justify-between">
+                <span className="text-[9px] tracking-[0.35em] text-muted-foreground/60">SCAN</span>
+                <span className="text-[10px] font-bold tabular-nums text-primary">{progress}%</span>
+              </div>
+            </div>
+
             <div className="relative mt-3 grid grid-cols-3 gap-2 border-t border-border pt-3 text-center">
               <span className="text-[9px] text-muted-foreground">
-                الدقة <b className="block text-[11px] text-primary">97%</b>
+                Accuracy <b className="block text-[11px] text-primary">97%</b>
               </span>
               <span className="text-[9px] text-muted-foreground">
-                الصفوف <b className="block text-[11px] text-primary">{revealed}/10</b>
+                Rows <b className="block text-[11px] text-primary">{revealed}/10</b>
               </span>
               <span className="text-[9px] text-muted-foreground">
-                الحالة
+                Status
                 <b className={`block text-[11px] ${running ? "text-gold" : "text-success"}`}>
-                  {running ? "جارٍ الكشف" : "جاهز"}
+                  {running ? "SCANNING" : "READY"}
                 </b>
               </span>
             </div>
@@ -143,28 +166,28 @@ function ApplePage() {
               aria-hidden
               className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
             />
-            <div dir="ltr" className="space-y-1.5">
+            <div className="space-y-1.5">
               {order.map((r) => {
                 const open = revealed > r;
                 const active = running && revealed === r;
                 return (
                   <div
                     key={r}
-                    dir="ltr"
                     className={`flex items-center gap-1.5 rounded-xl px-1 py-1 transition-all duration-300 ${
                       active ? "scale-[1.02] bg-primary/10 shadow-[var(--glow-sm)]" : ""
                     }`}
                   >
                     <span
-                      className={`w-[52px] shrink-0 rounded-lg border py-1 text-center text-[10px] font-extrabold transition-colors ${
+                      className={`flex w-[54px] shrink-0 items-center justify-center gap-0.5 rounded-lg border py-1 text-center text-[10px] font-extrabold transition-colors ${
                         open
                           ? "border-primary/60 bg-primary/10 text-primary"
                           : "border-border bg-background/50 text-muted-foreground"
                       }`}
                     >
+                      {active && <Zap className="h-2.5 w-2.5" />}
                       {COEF[r]?.toFixed(2)}x
                     </span>
-                    <div dir="ltr" className="grid min-w-0 flex-1 grid-cols-5 gap-1">
+                    <div className="grid min-w-0 flex-1 grid-cols-5 gap-1">
                       {Array.from({ length: COLS }).map((_, c) => {
                         const key = `m${r * COLS + c + 1}`;
                         const rotten = grid?.[r]?.[c] === true;
@@ -186,7 +209,7 @@ function ApplePage() {
                             {open ? (
                               <img
                                 src={isSafe ? appleArt : rottenArt}
-                                alt={isSafe ? "آمنة" : "فاسدة"}
+                                alt={isSafe ? "safe" : "rotten"}
                                 loading="lazy"
                                 className={`h-7 w-7 object-contain ${
                                   isSafe
@@ -206,7 +229,7 @@ function ApplePage() {
               })}
             </div>
             <p className="flex items-center justify-center gap-1.5 pt-1 text-[9px] tracking-widest text-muted-foreground">
-              <Target className="h-3 w-3 text-primary" /> يبدأ الكشف من 1.23x للأعلى
+              <Target className="h-3 w-3 text-primary" /> Scan starts at 1.23x upward
             </p>
           </div>
 
@@ -217,18 +240,19 @@ function ApplePage() {
               disabled={running}
               className="gradient-primary sheen-on-hover flex items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-extrabold text-primary-foreground shadow-[var(--glow-lg)] transition-transform hover:scale-[1.03] active:scale-95 disabled:opacity-50"
             >
-              <Play className="h-4 w-4" /> بدأ الكشف
+              <Play className="h-4 w-4" /> START
             </button>
             <button
               onClick={restart}
               className="flex items-center justify-center gap-2 rounded-2xl border border-primary/60 bg-secondary/60 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
             >
-              <RotateCcw className="h-4 w-4" /> إعادة بدأ
+              <RotateCcw className="h-4 w-4" /> RESTART
             </button>
           </div>
 
           <p className="mt-3 flex items-center justify-center gap-1.5 text-[9.5px] text-muted-foreground">
-            <ShieldCheck className="h-3 w-3 text-primary" /> اتصال مشفر بسيرفر الكشف
+            <ShieldCheck className="h-3 w-3 text-primary" /> Encrypted link with the predictor
+            server
           </p>
 
           <div className="mt-8 flex flex-col items-center">
@@ -236,7 +260,7 @@ function ApplePage() {
           </div>
 
           <div className="mt-6 w-full">
-            <WinnersFeed title="أرباح لعبة التفاحة — مباشر" />
+            <WinnersFeed title="Apple game live wins" />
           </div>
         </div>
       </div>

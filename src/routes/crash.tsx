@@ -5,7 +5,7 @@ import { DragonMark, Particles, TopBar } from "@/components/vip/Chrome";
 import { WinnersFeed } from "@/components/vip/WinnersFeed";
 import { getUserId, PLATFORM } from "@/lib/session";
 import { fetchCrashOdd, isVip } from "@/lib/firebase";
-import planeArt from "@/assets/art-plane.png";
+import planeArt from "@/assets/logo-crash-game.png";
 
 export const Route = createFileRoute("/crash")({
   head: () => ({
