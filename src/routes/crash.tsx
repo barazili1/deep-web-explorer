@@ -192,6 +192,7 @@ function CrashPage() {
               />
               {/* line draws itself from bottom-left to top-right */}
               <path
+                ref={pathRef}
                 d="M0,100 C 55,100 88,68 100,4"
                 fill="none"
                 stroke="url(#crashline)"
