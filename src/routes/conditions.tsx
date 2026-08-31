@@ -7,19 +7,17 @@ import {
   Copy,
   Gamepad2,
   Lock,
-  Send,
   ShieldCheck,
   Sparkles,
   UserPlus,
   Wallet,
 } from "lucide-react";
 import imgDownload from "@/assets/cond-download.png";
-import imgTelegram from "@/assets/cond-telegram.png";
 import imgPromo from "@/assets/cond-promo.png";
 import imgDeposit from "@/assets/cond-deposit.png";
 import imgId from "@/assets/cond-id.png";
-import artPlane from "@/assets/art-plane.png";
-import artApple from "@/assets/art-apple.png";
+import logoCrash from "@/assets/logo-crash-game.png";
+import logoApple from "@/assets/logo-apple-game.png";
 import casinoBg from "@/assets/casino-bg.jpg";
 import xpLogo from "@/assets/xparibet-logo.jpg";
 import { OnlineUsers, Particles, TopBar } from "@/components/vip/Chrome";
@@ -48,8 +46,14 @@ export const Route = createFileRoute("/conditions")({
 type GameId = "crash" | "apple";
 
 const GAMES: { id: GameId; name: string; sub: string; img: string; to: "/crash" | "/apple" }[] = [
-  { id: "crash", name: "لعبة الطيارة", sub: "كاشف الأودد قبل الانفجار", img: artPlane, to: "/crash" },
-  { id: "apple", name: "لعبة التفاحة", sub: "كاشف الخانات الآمنة", img: artApple, to: "/apple" },
+  {
+    id: "crash",
+    name: "لعبة الطيارة",
+    sub: "كاشف الأودد قبل الانفجار",
+    img: logoCrash,
+    to: "/crash",
+  },
+  { id: "apple", name: "لعبة التفاحة", sub: "كاشف الخانات الآمنة", img: logoApple, to: "/apple" },
 ];
 
 function Step({
