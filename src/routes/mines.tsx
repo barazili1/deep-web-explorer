@@ -62,7 +62,7 @@ function MinesPage() {
 
           {/* Grid 5x5 */}
           <div className="glass mt-5 rounded-3xl p-3">
-            <div className="grid grid-cols-5 gap-2">
+            <div dir="ltr" className="grid grid-cols-5 gap-2">
               {Array.from({ length: TOTAL }, (_, i) => {
                 const on = picked.includes(i);
                 return (

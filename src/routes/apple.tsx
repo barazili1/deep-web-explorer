@@ -182,7 +182,7 @@ function ApplePage() {
           </div>
 
           {/* Grid */}
-          <div className="card-elite relative space-y-1.5 overflow-hidden rounded-[28px] p-3">
+          <div dir="ltr" className="card-elite relative space-y-1.5 overflow-hidden rounded-[28px] p-3">
             <span
               aria-hidden
               className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
