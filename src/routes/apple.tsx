@@ -160,33 +160,43 @@ function ApplePage() {
           </div>
 
           {/* Grid */}
-          <div className="glass relative space-y-1.5 rounded-3xl p-2.5">
+          <div className="card-elite relative space-y-1.5 overflow-hidden rounded-[28px] p-3">
             <span
               aria-hidden
               className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
             />
-            <div className="space-y-1.5">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-[0.07]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 20% 0%, var(--primary), transparent 60%), radial-gradient(circle at 80% 100%, var(--primary), transparent 60%)",
+              }}
+            />
+            <div className="relative space-y-1.5">
               {order.map((r) => {
                 const open = revealed > r;
                 const active = running && revealed === r;
                 return (
                   <div
                     key={r}
-                    className={`flex items-center gap-1.5 rounded-xl px-1 py-1 transition-all duration-300 ${
-                      active ? "scale-[1.02] bg-primary/10 shadow-[var(--glow-sm)]" : ""
+                    className={`flex items-center gap-2 rounded-2xl px-1.5 py-1 transition-all duration-300 ${
+                      active
+                        ? "scale-[1.02] bg-primary/10 shadow-[var(--glow-sm)] ring-1 ring-primary/40"
+                        : ""
                     }`}
                   >
                     <span
-                      className={`flex w-[54px] shrink-0 items-center justify-center gap-0.5 rounded-lg border py-1 text-center text-[10px] font-extrabold transition-colors ${
+                      className={`flex w-[58px] shrink-0 items-center justify-center gap-0.5 rounded-full border py-1.5 text-center text-[10px] font-extrabold transition-all ${
                         open
-                          ? "border-primary/60 bg-primary/10 text-primary"
+                          ? "border-primary/60 bg-primary/15 text-primary shadow-[var(--glow-sm)]"
                           : "border-border bg-background/50 text-muted-foreground"
                       }`}
                     >
                       {active && <Zap className="h-2.5 w-2.5" />}
                       {COEF[r]?.toFixed(2)}x
                     </span>
-                    <div className="grid min-w-0 flex-1 grid-cols-5 gap-1">
+                    <div className="grid min-w-0 flex-1 grid-cols-5 gap-1.5">
                       {Array.from({ length: COLS }).map((_, c) => {
                         const key = `m${r * COLS + c + 1}`;
                         const rotten = grid?.[r]?.[c] === true;
@@ -195,22 +205,36 @@ function ApplePage() {
                           <div
                             key={key}
                             aria-label={key}
-                            className={`flex h-11 w-full min-w-0 max-w-[62px] items-center justify-center rounded-xl border transition-all duration-500 ${
+                            className={`relative mx-auto flex aspect-square w-full min-w-0 max-w-[54px] items-center justify-center rounded-full border transition-all duration-500 ${
                               isSafe
-                                ? "animate-fade-up border-primary bg-primary/15 shadow-[var(--glow-sm)]"
+                                ? "animate-fade-up scale-105 border-primary bg-primary/20 shadow-[var(--glow-md)]"
                                 : open
-                                  ? "border-border/60 bg-muted/40 opacity-70"
+                                  ? "border-border/60 bg-muted/40 opacity-60"
                                   : active
                                     ? "animate-glow-pulse border-primary/70 bg-primary/15"
-                                    : "border-border bg-background/60"
+                                    : "border-border/70 bg-background/60"
                             }`}
+                            style={
+                              !open && !active
+                                ? {
+                                    backgroundImage:
+                                      "radial-gradient(circle at 30% 25%, oklch(1 0 0 / 7%), transparent 60%)",
+                                  }
+                                : undefined
+                            }
                           >
+                            {isSafe && (
+                              <span
+                                aria-hidden
+                                className="animate-breathe absolute inset-0 rounded-full bg-primary/25 blur-md"
+                              />
+                            )}
                             {open ? (
                               <img
                                 src={isSafe ? appleArt : rottenArt}
                                 alt={isSafe ? "safe" : "rotten"}
                                 loading="lazy"
-                                className={`h-7 w-7 object-contain ${
+                                className={`relative h-7 w-7 object-contain ${
                                   isSafe
                                     ? "drop-shadow-[0_0_10px_var(--primary-glow)]"
                                     : "opacity-70 grayscale"
