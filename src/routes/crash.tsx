@@ -27,6 +27,8 @@ function CrashPage() {
   const [running, setRunning] = useState(false);
   const [history, setHistory] = useState<number[]>([]);
   const raf = useRef<number | null>(null);
+  const pathRef = useRef<SVGPathElement | null>(null);
+  const [tip, setTip] = useState({ x: 0, y: 100 });
 
   useEffect(() => {
     setUserId(getUserId() || "GUEST");
