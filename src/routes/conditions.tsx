@@ -139,8 +139,8 @@ function ConditionsPage() {
     return () => clearTimeout(t);
   }, [loading, game, navigate]);
 
-  const total = 7;
-  const doneCount = 4 + (copied ? 1 : 0) + (id.trim() ? 1 : 0) + (game ? 1 : 0);
+  const total = 6;
+  const doneCount = 3 + (copied ? 1 : 0) + (id.trim() ? 1 : 0) + (game ? 1 : 0);
   const progress = Math.round((doneCount / total) * 100);
   const ready = !!id.trim() && !!game;
 
