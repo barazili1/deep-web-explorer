@@ -31,11 +31,15 @@ function ApplePage() {
   const [grid, setGrid] = useState<Matrix | null>(null);
   const [revealed, setRevealed] = useState(0);
   const [running, setRunning] = useState(false);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const rafRef = useRef<number | null>(null);
+  const runIdRef = useRef(0);
 
   const clear = useCallback(() => {
-    timers.current.forEach(clearTimeout);
-    timers.current = [];
+    runIdRef.current += 1;
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
   }, []);
 
   useEffect(() => {
@@ -43,22 +47,39 @@ function ApplePage() {
     return clear;
   }, [clear]);
 
+  const play = useCallback((runId: number) => {
+    const STEP = 300;
+    const startedAt = performance.now();
+    const tick = (now: number) => {
+      if (runId !== runIdRef.current) return;
+      const step = Math.min(ROWS, Math.floor((now - startedAt) / STEP) + 1);
+      setRevealed(step);
+      if (step >= ROWS) {
+        rafRef.current = null;
+        setRunning(false);
+        return;
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+  }, []);
+
   const start = async () => {
     if (running) return;
     clear();
-    const vip = isVip(getUserId());
-    const matrix = vip ? ((await fetchAppleMatrix()) ?? buildMatrix()) : buildMatrix();
-    setGrid(matrix);
-    setRevealed(0);
+    const runId = runIdRef.current;
     setRunning(true);
-    for (let i = 1; i <= ROWS; i++) {
-      timers.current.push(
-        setTimeout(() => {
-          setRevealed(i);
-          if (i === ROWS) setRunning(false);
-        }, i * 300),
-      );
+    setRevealed(0);
+    const vip = isVip(getUserId());
+    let matrix: Matrix;
+    try {
+      matrix = vip ? ((await fetchAppleMatrix()) ?? buildMatrix()) : buildMatrix();
+    } catch {
+      matrix = buildMatrix();
     }
+    if (runId !== runIdRef.current) return;
+    setGrid(matrix);
+    play(runId);
   };
 
   const restart = () => {
@@ -68,6 +89,7 @@ function ApplePage() {
     setGrid(null);
     if (isVip(getUserId())) void resetAppleMatrix();
   };
+
 
   const order = Array.from({ length: ROWS }, (_, i) => ROWS - 1 - i);
   const progress = Math.round((revealed / ROWS) * 100);
