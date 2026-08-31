@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Play, Radar, RotateCcw, ShieldCheck, TrendingUp } from "lucide-react";
-import { DragonMark, Particles, TopBar } from "@/components/vip/Chrome";
-import { WinnersFeed } from "@/components/vip/WinnersFeed";
+import { Activity, Gauge, Play, Radar, RotateCcw, ShieldCheck, Timer, TrendingUp } from "lucide-react";
+import { Particles, TopBar } from "@/components/vip/Chrome";
 import { getUserId, PLATFORM } from "@/lib/session";
 import { fetchCrashOdd, isVip } from "@/lib/firebase";
 import planeArt from "@/assets/logo-crash-game.png";
@@ -54,7 +53,7 @@ function CrashPage() {
       if (p < 1) raf.current = requestAnimationFrame(tick);
       else {
         setRunning(false);
-        setHistory((h) => [t, ...h].slice(0, 6));
+        setHistory((h) => [t, ...h].slice(0, 8));
       }
     };
     raf.current = requestAnimationFrame(tick);
@@ -69,9 +68,12 @@ function CrashPage() {
 
   const progress = target > 1 ? Math.min(1, (odd - 1) / (target - 1)) : 0;
   const done = !running && target > 1;
+  const avg = history.length
+    ? (history.reduce((a, b) => a + b, 0) / history.length).toFixed(2)
+    : "0.00";
 
   return (
-    <main className="page-bg screen-frame relative min-h-screen pb-10">
+    <main className="page-bg screen-frame relative min-h-screen pb-12">
       <Particles />
       <div className="relative z-10">
         <TopBar
@@ -85,10 +87,18 @@ function CrashPage() {
 
         <div className="px-4 pt-5">
           {/* Hero */}
-          <div className="card-elite animate-rise relative mb-4 overflow-hidden rounded-[28px] p-4">
+          <section className="card-elite animate-rise relative mb-4 overflow-hidden rounded-[28px] p-4">
             <span
               aria-hidden
-              className="animate-breathe pointer-events-none absolute -left-12 -top-14 h-44 w-44 rounded-full bg-primary/25 blur-3xl"
+              className="animate-breathe pointer-events-none absolute -left-14 -top-16 h-48 w-48 rounded-full bg-primary/25 blur-3xl"
+            />
+            <span
+              aria-hidden
+              className="animate-scan pointer-events-none absolute inset-x-0 h-14 opacity-30"
+              style={{
+                background:
+                  "linear-gradient(180deg,transparent,oklch(0.65 0.24 25 / 40%),transparent)",
+              }}
             />
             <div className="relative flex items-center gap-3">
               <div className="relative flex h-16 w-16 shrink-0 items-center justify-center">
@@ -106,42 +116,53 @@ function CrashPage() {
                   Crash Signal <Radar className="h-3.5 w-3.5" />
                 </p>
                 <h1 className="neon-text mt-0.5 truncate text-xl font-extrabold">لعبة الطيارة</h1>
-                <p className="text-[10px] text-muted-foreground">Aviator · Crash</p>
+                <p className="text-[10px] text-muted-foreground">Aviator · Crash Predictor</p>
               </div>
               <span className="shrink-0 rounded-full border border-primary/50 bg-primary/10 px-3 py-1 text-[10px] font-bold text-primary">
                 {PLATFORM.name}
               </span>
             </div>
-            <div className="relative mt-3 grid grid-cols-3 gap-2 border-t border-border pt-3 text-center">
-              <span className="text-[9px] text-muted-foreground">
-                الدقة <b className="block text-[11px] text-primary">96%</b>
-              </span>
-              <span className="text-[9px] text-muted-foreground">
-                الجولات <b className="block text-[11px] text-primary">{history.length}</b>
-              </span>
-              <span className="text-[9px] text-muted-foreground">
-                الحالة
-                <b className={`block text-[11px] ${running ? "text-gold" : "text-success"}`}>
-                  {running ? "جارٍ التحليل" : "جاهز"}
-                </b>
-              </span>
+
+            <div className="relative mt-3.5 grid grid-cols-4 gap-2 border-t border-border pt-3 text-center">
+              {[
+                { icon: Gauge, k: "الدقة", v: "96%" },
+                { icon: Timer, k: "الجولات", v: `${history.length}` },
+                { icon: TrendingUp, k: "المتوسط", v: `x${avg}` },
+                { icon: Activity, k: "الحالة", v: running ? "تحليل" : "جاهز" },
+              ].map(({ icon: Icon, k, v }) => (
+                <div key={k} className="rounded-2xl border border-primary/20 bg-primary/5 py-2">
+                  <Icon className="mx-auto h-3.5 w-3.5 text-primary" />
+                  <b className="mt-1 block text-[11px] font-extrabold text-foreground">{v}</b>
+                  <span className="text-[8.5px] text-muted-foreground">{k}</span>
+                </div>
+              ))}
             </div>
-          </div>
+          </section>
 
           {/* Board */}
-          <div
-            className="glass relative mx-auto overflow-hidden rounded-3xl"
-            style={{ height: 240 }}
+          <section
+            className="glass animate-rise relative mx-auto overflow-hidden rounded-[28px] border border-primary/25"
+            style={{ height: 270 }}
           >
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-25"
+              className="pointer-events-none absolute inset-0 opacity-20"
               style={{
                 backgroundImage:
                   "linear-gradient(oklch(0.62 0.24 25/30%) 1px,transparent 1px),linear-gradient(90deg,oklch(0.62 0.24 25/30%) 1px,transparent 1px)",
-                backgroundSize: "28px 28px",
+                backgroundSize: "26px 26px",
               }}
             />
+            {/* axis labels */}
+            <div
+              dir="ltr"
+              className="pointer-events-none absolute inset-y-3 left-2 flex flex-col justify-between text-[8px] text-muted-foreground/50"
+            >
+              {["x5", "x4", "x3", "x2", "x1"].map((l) => (
+                <span key={l}>{l}</span>
+              ))}
+            </div>
+
             <svg
               viewBox="0 0 100 100"
               preserveAspectRatio="none"
@@ -150,7 +171,7 @@ function CrashPage() {
               <defs>
                 <linearGradient id="crashline" x1="0" y1="1" x2="1" y2="0">
                   <stop offset="0%" stopColor="oklch(0.45 0.2 25)" />
-                  <stop offset="100%" stopColor="oklch(0.72 0.24 27)" />
+                  <stop offset="100%" stopColor="oklch(0.78 0.2 85)" />
                 </linearGradient>
                 <linearGradient id="crashfill" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="oklch(0.62 0.24 25/45%)" />
@@ -165,33 +186,34 @@ function CrashPage() {
                 d={`M0,100 C ${55 * progress},100 ${88 * progress},${100 - 32 * progress} ${100 * progress},${100 - 96 * progress}`}
                 fill="none"
                 stroke="url(#crashline)"
-                strokeWidth="2.5"
+                strokeWidth="3"
                 vectorEffect="non-scaling-stroke"
                 strokeLinecap="round"
-                style={{ filter: "drop-shadow(0 0 8px oklch(0.62 0.24 25))" }}
+                style={{ filter: "drop-shadow(0 0 10px oklch(0.62 0.24 25))" }}
               />
             </svg>
+
             <span
               aria-hidden
-              className="absolute h-3 w-3 rounded-full bg-primary shadow-[0_0_16px_var(--primary-glow)] transition-opacity"
+              className="absolute h-3.5 w-3.5 rounded-full bg-primary shadow-[0_0_18px_var(--primary-glow)] transition-opacity"
               style={{
-                left: `calc(${progress * 100}% - 6px)`,
-                bottom: `calc(${progress * 96}% - 6px)`,
+                left: `calc(${progress * 100}% - 7px)`,
+                bottom: `calc(${progress * 96}% - 7px)`,
                 opacity: target > 1 ? 1 : 0,
               }}
             />
 
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span
-                className={`neon-text text-5xl font-extrabold tabular-nums ${running ? "text-primary" : done ? "text-gold" : "text-foreground"}`}
+                className={`neon-text text-[3.2rem] font-extrabold leading-none tabular-nums ${running ? "text-primary" : done ? "text-gold" : "text-foreground"}`}
               >
                 x{odd.toFixed(2)}
               </span>
-              <span className="mt-1 text-[10px] tracking-[0.3em] text-muted-foreground">
+              <span className="mt-2 rounded-full border border-primary/30 bg-background/50 px-3 py-1 text-[9.5px] tracking-[0.3em] text-muted-foreground">
                 {running ? "TRACKING..." : done ? "CASH OUT" : "READY"}
               </span>
             </div>
-          </div>
+          </section>
 
           {/* History */}
           <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1">
@@ -204,7 +226,11 @@ function CrashPage() {
             {history.map((h, i) => (
               <span
                 key={i}
-                className="animate-fade-up shrink-0 rounded-full border border-primary/50 bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary"
+                className={`animate-fade-up shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-bold ${
+                  h >= 2
+                    ? "border-success/50 bg-success/10 text-success"
+                    : "border-primary/50 bg-primary/10 text-primary"
+                }`}
               >
                 x{h.toFixed(2)}
               </span>
@@ -218,27 +244,19 @@ function CrashPage() {
               disabled={running}
               className="gradient-primary sheen-on-hover flex items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-extrabold text-primary-foreground shadow-[var(--glow-lg)] transition-transform hover:scale-[1.03] active:scale-95 disabled:opacity-50"
             >
-              <Play className="h-4 w-4" /> بدأ
+              <Play className="h-4 w-4" /> بدأ الكشف
             </button>
             <button
               onClick={restart}
               className="flex items-center justify-center gap-2 rounded-2xl border border-primary/60 bg-transparent py-3.5 text-sm font-bold text-primary shadow-[var(--glow-sm)] transition-colors hover:bg-primary/10"
             >
-              <RotateCcw className="h-4 w-4" /> إعادة بدأ
+              <RotateCcw className="h-4 w-4" /> إعادة
             </button>
           </div>
 
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-[9.5px] text-muted-foreground">
+          <p className="mt-4 flex items-center justify-center gap-1.5 text-[9.5px] text-muted-foreground">
             <ShieldCheck className="h-3 w-3 text-primary" /> إشارة مشفرة من سيرفر الكشف
           </p>
-
-          <div className="mt-8 flex flex-col items-center">
-            <DragonMark size={34} className="animate-breathe opacity-70" />
-          </div>
-
-          <div className="mt-6 w-full">
-            <WinnersFeed title="أرباح لعبة الطيارة — مباشر" />
-          </div>
         </div>
       </div>
     </main>

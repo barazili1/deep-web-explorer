@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Minus, Play, Plus, RotateCcw } from "lucide-react";
 import gem from "@/assets/gem-diamond.png";
 import { DragonMark, Particles, TopBar } from "@/components/vip/Chrome";
-import { WinnersFeed } from "@/components/vip/WinnersFeed";
 import { getPlatform, getUserId, PLATFORMS } from "@/lib/session";
 
 export const Route = createFileRoute("/mines")({
@@ -134,9 +133,6 @@ function MinesPage() {
             </button>
           </div>
 
-          <div className="mt-10 w-full">
-            <WinnersFeed title="أرباح Gems Mines — مباشر" />
-          </div>
         </div>
       </div>
     </main>
