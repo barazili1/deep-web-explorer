@@ -318,24 +318,6 @@ function ConditionsPage() {
             <Step
               n={5}
               delay={280}
-              image={imgTelegram}
-              title="قناة التلجرام"
-              desc="انضم لقناتنا الحصرية للحصول على التحديثات والإشارات اليومية."
-              done
-            >
-              <a
-                href={PLATFORM.telegram}
-                target="_blank"
-                rel="noreferrer"
-                className="sheen-on-hover flex items-center justify-center gap-1.5 rounded-2xl border border-primary/45 py-3 text-xs font-extrabold text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-[var(--glow-md)]"
-              >
-                <Send className="h-3.5 w-3.5" /> انضمام الآن
-              </a>
-            </Step>
-
-            <Step
-              n={6}
-              delay={350}
               image={imgId}
               title="الـ ID الخاص بك"
               desc="أدخل الـ ID الخاص بك في المنصة للتأكد من التفعيل."
@@ -351,10 +333,10 @@ function ConditionsPage() {
             </Step>
 
             <Step
-              n={7}
-              delay={420}
+              n={6}
+              delay={350}
               last
-              image={artApple}
+              image={logoApple}
               title="اختر اللعبة"
               desc="لازم تختار لعبة واحدة لتشغيل الكاشف الخاص بها."
               done={!!game}
