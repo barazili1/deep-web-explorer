@@ -1,26 +1,37 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { BadgeCheck, Check, ChevronLeft, Copy, Gamepad2, Lock } from "lucide-react";
+import {
+  BadgeCheck,
+  Check,
+  ChevronLeft,
+  Copy,
+  Gamepad2,
+  Lock,
+  Send,
+  UserPlus,
+  Wallet,
+} from "lucide-react";
 import imgDownload from "@/assets/cond-download.png";
 import imgTelegram from "@/assets/cond-telegram.png";
 import imgPromo from "@/assets/cond-promo.png";
 import imgDeposit from "@/assets/cond-deposit.png";
 import imgId from "@/assets/cond-id.png";
-import gameCrash from "@/assets/game-crash.png";
-import gameApple from "@/assets/game-apple.png";
-import { DragonMark, Particles, TopBar } from "@/components/vip/Chrome";
-import { PLATFORMS, getPlatform, saveUserId, type PlatformId } from "@/lib/session";
+import artPlane from "@/assets/art-plane.png";
+import artApple from "@/assets/art-apple.png";
+import { DragonMark, OnlineUsers, Particles, TopBar } from "@/components/vip/Chrome";
+import { BRAND, PLATFORM, saveUserId } from "@/lib/session";
 
 export const Route = createFileRoute("/conditions")({
   head: () => ({
     meta: [
-      { title: "شروط التفعيل VIP — DARK WEB" },
+      { title: "شروط التفعيل VIP — ثغرات التطبيقات" },
       {
         name: "description",
-        content: "أكمل شروط التفعيل واختر لعبتك: Crash أو Apple of Fortune.",
+        content:
+          "أكمل شروط التفعيل على منصة Xparibet بالبروموكود FM333 واختر لعبتك: الطيارة أو التفاحة.",
       },
-      { property: "og:title", content: "شروط التفعيل VIP — DARK WEB" },
-      { property: "og:description", content: "خطوات تفعيل حساب VIP واختيار اللعبة." },
+      { property: "og:title", content: "شروط التفعيل VIP — ثغرات التطبيقات" },
+      { property: "og:description", content: "خطوات تفعيل حساب VIP على Xparibet واختيار اللعبة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -28,15 +39,21 @@ export const Route = createFileRoute("/conditions")({
   component: ConditionsPage,
 });
 
-type GameId = "crash" | "mines" | "apple";
+type GameId = "crash" | "apple";
 
-const GAMES: { id: GameId; name: string; sub: string; img: string; to: string }[] = [
-  { id: "crash", name: "Crash", sub: "كاشف الطيارة · أودد مضمون", img: gameCrash, to: "/crash" },
+const GAMES: { id: GameId; name: string; sub: string; img: string; to: "/crash" | "/apple" }[] = [
+  {
+    id: "crash",
+    name: "لعبة الطيارة",
+    sub: "كاشف الأودد قبل الانفجار",
+    img: artPlane,
+    to: "/crash",
+  },
   {
     id: "apple",
-    name: "Apple of Fortune",
-    sub: "كاشف التفاح الآمن",
-    img: gameApple,
+    name: "لعبة التفاحة",
+    sub: "كاشف الخانات الآمنة",
+    img: artApple,
     to: "/apple",
   },
 ];
@@ -63,7 +80,6 @@ function Condition({
       className="card-elite animate-rise group relative overflow-hidden rounded-[28px] p-4 text-right transition-all duration-500 hover:-translate-y-1 hover:border-primary/70 hover:shadow-[var(--glow-md)]"
       style={{ animationDelay: `${delay}ms` }}
     >
-      {/* ghost index */}
       <span
         aria-hidden
         className="pointer-events-none absolute -left-2 -top-5 select-none text-[76px] font-black leading-none text-primary/[0.07]"
@@ -80,10 +96,9 @@ function Condition({
       />
 
       <div className="relative flex items-start gap-3.5">
-        {/* medallion */}
-        <div className="relative flex h-[62px] w-[62px] shrink-0 items-center justify-center order-2">
+        <div className="relative order-2 flex h-[62px] w-[62px] shrink-0 items-center justify-center">
           <span className="absolute inset-0 rounded-full border border-primary/30" />
-          <span className="absolute inset-2 rounded-full bg-primary/15 blur-md" />
+          <span className="animate-breathe absolute inset-2 rounded-full bg-primary/15 blur-md" />
           <img
             src={image}
             alt={title}
@@ -123,32 +138,25 @@ function Condition({
 
 function ConditionsPage() {
   const navigate = useNavigate();
-  const [platform, setPlatform] = useState<PlatformId>("fansport");
   const [copied, setCopied] = useState(false);
   const [id, setId] = useState("");
   const [game, setGame] = useState<GameId | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setPlatform(getPlatform());
-  }, []);
-
-  useEffect(() => {
     if (!loading || !game) return undefined;
     const to = GAMES.find((g) => g.id === game)!.to;
-    const t = setTimeout(() => navigate({ to }), 5000);
+    const t = setTimeout(() => navigate({ to }), 4000);
     return () => clearTimeout(t);
   }, [loading, game, navigate]);
 
-  const p = PLATFORMS[platform];
-  const filled = (copied ? 1 : 0) + (id.trim() ? 1 : 0) + (game ? 1 : 0);
-  const total = 6;
-  const doneCount = 3 + filled;
+  const total = 7;
+  const doneCount = 4 + (copied ? 1 : 0) + (id.trim() ? 1 : 0) + (game ? 1 : 0);
   const progress = Math.round((doneCount / total) * 100);
   const ready = !!id.trim() && !!game;
 
   const copy = () => {
-    navigator.clipboard?.writeText(p.promo);
+    navigator.clipboard?.writeText(PLATFORM.promo);
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
   };
@@ -157,31 +165,28 @@ function ConditionsPage() {
     <main className="page-bg relative min-h-screen pb-28">
       <Particles />
       <div className="relative z-10">
-        <TopBar
-          title="شروط التفعيل VIP"
-          right={<BadgeCheck className="mr-auto h-5 w-5 text-primary" />}
-        />
+        <TopBar title="شروط التفعيل" right={<OnlineUsers />} />
 
         {/* Hero */}
-        <section className="animate-rise px-5 pt-[58px] text-center">
-          <div className="relative mx-auto flex h-[86px] w-[86px] items-center justify-center">
+        <section className="animate-rise px-5 pt-8 text-center">
+          <div className="relative mx-auto flex h-[92px] w-[92px] items-center justify-center">
             <span className="ring-conic animate-spin-slow absolute inset-0 rounded-full" />
             <span className="absolute inset-3 rounded-full border border-dashed border-primary/25" />
-            <DragonMark size={50} className="relative animate-breathe" />
+            <DragonMark size={52} className="relative animate-breathe" />
           </div>
           <h1 className="text-shimmer mt-4 text-[1.55rem] font-extrabold leading-tight">
             خطوات التفعيل
           </h1>
           <p className="mt-1.5 text-[11px] text-muted-foreground">
-            أكمل الشروط بالترتيب لتفعيل أداة {p.name}
+            أكمل الشروط بالترتيب لتفعيل أداة {BRAND} على منصة{" "}
+            <b className="text-primary">{PLATFORM.name}</b>
           </p>
 
-          {/* segmented progress */}
           <div className="mt-4 flex items-center justify-center gap-1.5" dir="ltr">
             {Array.from({ length: total }).map((_, i) => (
               <span
                 key={i}
-                className="h-[3px] w-8 rounded-full transition-all duration-500"
+                className="h-[3px] w-7 rounded-full transition-all duration-500"
                 style={
                   i < doneCount
                     ? { backgroundImage: "var(--gradient-primary)", boxShadow: "var(--glow-sm)" }
@@ -200,57 +205,57 @@ function ConditionsPage() {
               n={1}
               delay={0}
               image={imgDownload}
-              title="تحميل المنصة"
-              desc={`قم بتحميل وتثبيت التطبيق الرسمي لمنصة ${p.name} على هاتفك.`}
+              title={`تحميل تطبيق ${PLATFORM.name}`}
+              desc={`قم بتحميل وتثبيت التطبيق الرسمي لمنصة ${PLATFORM.name} على هاتفك.`}
             >
               <a
-                href={p.link}
+                href={PLATFORM.download}
                 target="_blank"
                 rel="noreferrer"
                 className="gradient-primary sheen-on-hover flex items-center justify-center gap-1.5 rounded-2xl py-3 text-xs font-extrabold text-primary-foreground shadow-[var(--glow-md)] transition-transform hover:scale-[1.02]"
               >
-                تحميل {p.name} <ChevronLeft className="h-3.5 w-3.5" />
+                تحميل التطبيق <ChevronLeft className="h-3.5 w-3.5" />
               </a>
             </Condition>
 
             <Condition
               n={2}
-              delay={80}
-              image={imgTelegram}
-              title="قناة التلجرام"
-              desc="انضم لقناتنا الحصرية للحصول على التحديثات والإشارات اليومية."
+              delay={70}
+              image={imgId}
+              title="إنشاء حساب جديد"
+              desc="سجّل حساباً جديداً من الرابط الخاص بنا حتى يتم ربط حسابك بالأداة."
             >
               <a
-                href="https://t.me/vbdhdvdv"
+                href={PLATFORM.register}
                 target="_blank"
                 rel="noreferrer"
                 className="sheen-on-hover flex items-center justify-center gap-1.5 rounded-2xl border border-primary/45 py-3 text-xs font-extrabold text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-[var(--glow-md)]"
               >
-                انضمام الآن <ChevronLeft className="h-3.5 w-3.5" />
+                <UserPlus className="h-3.5 w-3.5" /> التسجيل الآن
               </a>
             </Condition>
 
             <Condition
               n={3}
-              delay={160}
+              delay={140}
               image={imgPromo}
               title="البروموكود"
-              desc="سجل باستخدام البروموكود الخاص بنا للحصول على البونص:"
+              desc="استخدم البروموكود عند التسجيل للحصول على البونص الكامل:"
               done={copied}
             >
               <button
                 onClick={copy}
                 className="flex w-full items-center justify-between gap-3 rounded-2xl border border-dashed border-primary/50 px-4 py-3 transition-colors hover:bg-primary/10"
               >
-                <span className="neon-text text-xl font-extrabold tracking-[0.45em] text-primary">
-                  {p.promo}
+                <span className="neon-text text-xl font-extrabold tracking-[0.35em] text-primary">
+                  {PLATFORM.promo}
                 </span>
                 <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
                   {copied ? "تم النسخ" : "نسخ الكود"}
                   {copied ? (
-                    <Check className="h-4 w-4 text-success" />
+                    <Check className="h-3.5 w-3.5 text-success" />
                   ) : (
-                    <Copy className="h-4 w-4 text-primary" />
+                    <Copy className="h-3.5 w-3.5" />
                   )}
                 </span>
               </button>
@@ -258,26 +263,39 @@ function ConditionsPage() {
 
             <Condition
               n={4}
-              delay={240}
+              delay={210}
               image={imgDeposit}
               title="الإيداع"
-              desc="قم بعمل إيداع أولي بقيمة 250 جنيه أو 5 دولار لتفعيل الحساب."
+              desc="قم بأول إيداع في حسابك حتى يعمل الكاشف بأعلى دقة."
             >
-              <div className="grid grid-cols-2 gap-2.5">
-                {["250 EGP", "5 USD"].map((v) => (
-                  <span
-                    key={v}
-                    className="rounded-2xl border border-primary/25 py-2.5 text-center text-[12px] font-extrabold tracking-wider text-gold"
-                  >
-                    {v}
-                  </span>
-                ))}
+              <div className="flex items-center justify-between gap-3 rounded-2xl border border-primary/30 bg-primary/5 px-4 py-3">
+                <span className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                  <Wallet className="h-4 w-4 text-primary" /> الحد الأدنى
+                </span>
+                <span className="text-[13px] font-extrabold text-primary">{PLATFORM.deposit}</span>
               </div>
             </Condition>
 
             <Condition
               n={5}
-              delay={320}
+              delay={280}
+              image={imgTelegram}
+              title="قناة التلجرام"
+              desc="انضم لقناتنا الحصرية للحصول على التحديثات والإشارات اليومية."
+            >
+              <a
+                href={PLATFORM.telegram}
+                target="_blank"
+                rel="noreferrer"
+                className="sheen-on-hover flex items-center justify-center gap-1.5 rounded-2xl border border-primary/45 py-3 text-xs font-extrabold text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-[var(--glow-md)]"
+              >
+                <Send className="h-3.5 w-3.5" /> انضمام الآن
+              </a>
+            </Condition>
+
+            <Condition
+              n={6}
+              delay={350}
               image={imgId}
               title="الـ ID الخاص بك"
               desc="أدخل الـ ID الخاص بك في المنصة للتأكد من التفعيل."
@@ -292,25 +310,17 @@ function ConditionsPage() {
               />
             </Condition>
 
-            {/* Game selection as condition 6 */}
+            {/* Game selection */}
             <li
               className="card-elite animate-rise relative overflow-hidden rounded-[28px] p-4"
-              style={{ animationDelay: "400ms" }}
+              style={{ animationDelay: "420ms" }}
             >
               <span
                 aria-hidden
                 className="pointer-events-none absolute -left-2 -top-5 select-none text-[76px] font-black leading-none text-primary/[0.07]"
               >
-                6
+                7
               </span>
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-x-10 top-0 h-px"
-                style={{
-                  background: "linear-gradient(90deg,transparent,var(--primary),transparent)",
-                  opacity: 0.6,
-                }}
-              />
               <div className="relative flex items-center justify-end gap-2">
                 <h2 className="text-[14px] font-extrabold text-foreground">اختر اللعبة</h2>
                 <span
@@ -363,8 +373,8 @@ function ConditionsPage() {
                         src={g.img}
                         alt={g.name}
                         loading="lazy"
-                        width={512}
-                        height={512}
+                        width={768}
+                        height={768}
                         className={`h-12 w-12 shrink-0 object-contain drop-shadow-[0_0_12px_var(--primary-glow)] transition-transform duration-300 ${active ? "scale-110" : ""}`}
                       />
                     </button>
@@ -385,8 +395,9 @@ function ConditionsPage() {
             setLoading(true);
           }}
           disabled={!ready}
-          className="gradient-primary sheen-on-hover w-full rounded-[22px] py-3.5 text-sm font-extrabold tracking-wide text-primary-foreground shadow-[var(--glow-lg)] transition-transform hover:scale-[1.01] active:scale-95 disabled:opacity-40 disabled:shadow-none"
+          className="gradient-primary sheen-on-hover flex w-full items-center justify-center gap-2 rounded-[22px] py-3.5 text-sm font-extrabold tracking-wide text-primary-foreground shadow-[var(--glow-lg)] transition-transform hover:scale-[1.01] active:scale-95 disabled:opacity-40 disabled:shadow-none"
         >
+          <BadgeCheck className="h-4 w-4" />
           {ready ? "أكملت الشروط، ابدأ الربح" : "أكمل الـ ID واختر لعبة"}
         </button>
         {!ready && (
@@ -403,7 +414,7 @@ function ConditionsPage() {
             <span className="ring-conic absolute inset-6 rounded-full [animation:spin-slow_9s_linear_infinite_reverse]" />
             <DragonMark size={78} className="animate-breathe" />
           </div>
-          <p className="text-shimmer text-sm font-extrabold tracking-[0.3em]">DARK WEB</p>
+          <p className="text-shimmer text-sm font-extrabold">{BRAND}</p>
           <p className="text-xs tracking-widest text-muted-foreground">جارٍ تفعيل الحساب VIP...</p>
         </div>
       )}
