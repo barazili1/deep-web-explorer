@@ -71,6 +71,7 @@ function CrashPage() {
     setRunning(false);
     setOdd(1);
     setTarget(0);
+    setTip({ x: 0, y: 100 });
   };
 
   const progress = target > 1 ? Math.min(1, (odd - 1) / (target - 1)) : 0;
