@@ -104,22 +104,19 @@ function Splash() {
           <ShieldCheck className="h-3.5 w-3.5" /> SECURE · VIP · 2026
         </p>
 
-        {/* terminal log */}
-        <div className="glass mt-6 w-full rounded-2xl border border-primary/20 p-3.5 text-right">
-          <p className="mb-2 flex items-center justify-end gap-1.5 text-[9px] tracking-[0.3em] text-muted-foreground">
-            SYSTEM LOG <TerminalSquare className="h-3 w-3 text-primary" />
-          </p>
-          <ul dir="rtl" className="space-y-1.5">
-            {LOGS.slice(0, shown).map((l) => (
-              <li
-                key={l}
-                className="animate-fade-up text-[11px] text-muted-foreground [font-family:ui-monospace,monospace]"
-              >
-                <span className="text-primary">■</span> {l.replace("> ", "")}
-              </li>
-            ))}
-          </ul>
+        {/* platform badge */}
+        <div className="glass mt-6 flex items-center justify-center gap-2 rounded-2xl border border-primary/20 px-4 py-2.5">
+          <img
+            src={xpLogo}
+            alt="Xparibet"
+            width={447}
+            height={447}
+            className="h-7 w-7 rounded-full object-cover ring-1 ring-primary/40"
+          />
+          <span className="text-[11px] font-bold text-foreground">Xparibet</span>
+          <span className="text-[10px] text-muted-foreground">· المنصة المعتمدة</span>
         </div>
+
 
         {/* progress */}
         <div className="mt-5 w-full">
