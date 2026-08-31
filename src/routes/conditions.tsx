@@ -12,10 +12,12 @@ import {
   UserPlus,
   Wallet,
 } from "lucide-react";
-import imgDownload from "@/assets/cond-download.png";
-import imgPromo from "@/assets/cond-promo.png";
-import imgDeposit from "@/assets/cond-deposit.png";
-import imgId from "@/assets/cond-id.png";
+import imgDownload from "@/assets/step-download.png";
+import imgRegister from "@/assets/step-register.png";
+import imgPromo from "@/assets/step-promo.png";
+import imgDeposit from "@/assets/step-deposit.png";
+import imgId from "@/assets/step-id.png";
+import imgGame from "@/assets/step-game.png";
 import logoCrash from "@/assets/logo-crash-game.png";
 import logoApple from "@/assets/logo-apple-game.png";
 import casinoBg from "@/assets/casino-bg.jpg";
@@ -102,7 +104,7 @@ function Step({
 
       <div className="card-elite order-1 mb-3.5 min-w-0 flex-1 overflow-hidden rounded-[24px] p-3.5 text-right transition-all duration-500 hover:-translate-y-0.5 hover:border-primary/60">
         <div className="flex items-start gap-3">
-          <div className="relative order-2 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-primary/25 bg-primary/5">
+          <div className="relative order-2 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 shadow-[var(--glow-sm)]">
             <span className="animate-breathe absolute inset-3 rounded-full bg-primary/25 blur-md" />
             <img
               src={image}
@@ -110,7 +112,7 @@ function Step({
               loading="lazy"
               width={512}
               height={512}
-              className="relative h-9 w-9 object-contain drop-shadow-[0_0_14px_var(--primary-glow)]"
+              className="relative h-11 w-11 object-contain drop-shadow-[0_0_14px_var(--primary-glow)]"
             />
           </div>
           <div className="order-1 min-w-0 flex-1">
@@ -262,7 +264,7 @@ function ConditionsPage() {
             <Step
               n={2}
               delay={70}
-              image={imgId}
+              image={imgRegister}
               title="إنشاء حساب جديد"
               desc="سجّل حساباً جديداً من الرابط الخاص بنا حتى يتم ربط حسابك بالأداة."
               done
@@ -340,7 +342,7 @@ function ConditionsPage() {
               n={6}
               delay={350}
               last
-              image={logoApple}
+              image={imgGame}
               title="اختر اللعبة"
               desc="لازم تختار لعبة واحدة لتشغيل الكاشف الخاص بها."
               done={!!game}
