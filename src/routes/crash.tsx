@@ -182,13 +182,17 @@ function CrashPage() {
                 d={`M0,100 C ${55 * progress},100 ${88 * progress},${100 - 32 * progress} ${100 * progress},${100 - 96 * progress} L ${100 * progress},100 Z`}
                 fill="url(#crashfill)"
               />
+              {/* line draws itself from bottom-left to top-right */}
               <path
-                d={`M0,100 C ${55 * progress},100 ${88 * progress},${100 - 32 * progress} ${100 * progress},${100 - 96 * progress}`}
+                d="M0,100 C 55,100 88,68 100,4"
                 fill="none"
                 stroke="url(#crashline)"
                 strokeWidth="3"
                 vectorEffect="non-scaling-stroke"
                 strokeLinecap="round"
+                pathLength={100}
+                strokeDasharray={100}
+                strokeDashoffset={100 - progress * 100}
                 style={{ filter: "drop-shadow(0 0 10px oklch(0.62 0.24 25))" }}
               />
             </svg>
