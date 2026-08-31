@@ -52,6 +52,11 @@ function CrashPage() {
       const p = Math.min(1, (now - t0) / dur);
       const eased = 1 - Math.pow(1 - p, 3);
       setOdd(1 + (t - 1) * eased);
+      const path = pathRef.current;
+      if (path) {
+        const pt = path.getPointAtLength(path.getTotalLength() * eased);
+        setTip({ x: pt.x, y: pt.y });
+      }
       if (p < 1) raf.current = requestAnimationFrame(tick);
       else {
         setRunning(false);
