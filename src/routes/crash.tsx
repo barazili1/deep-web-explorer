@@ -27,6 +27,8 @@ function CrashPage() {
   const [running, setRunning] = useState(false);
   const [history, setHistory] = useState<number[]>([]);
   const raf = useRef<number | null>(null);
+  const pathRef = useRef<SVGPathElement | null>(null);
+  const [tip, setTip] = useState({ x: 0, y: 100 });
 
   useEffect(() => {
     setUserId(getUserId() || "GUEST");
@@ -50,6 +52,11 @@ function CrashPage() {
       const p = Math.min(1, (now - t0) / dur);
       const eased = 1 - Math.pow(1 - p, 3);
       setOdd(1 + (t - 1) * eased);
+      const path = pathRef.current;
+      if (path) {
+        const pt = path.getPointAtLength(path.getTotalLength() * eased);
+        setTip({ x: pt.x, y: pt.y });
+      }
       if (p < 1) raf.current = requestAnimationFrame(tick);
       else {
         setRunning(false);
@@ -64,6 +71,7 @@ function CrashPage() {
     setRunning(false);
     setOdd(1);
     setTarget(0);
+    setTip({ x: 0, y: 100 });
   };
 
   const progress = target > 1 ? Math.min(1, (odd - 1) / (target - 1)) : 0;
@@ -182,13 +190,18 @@ function CrashPage() {
                 d={`M0,100 C ${55 * progress},100 ${88 * progress},${100 - 32 * progress} ${100 * progress},${100 - 96 * progress} L ${100 * progress},100 Z`}
                 fill="url(#crashfill)"
               />
+              {/* line draws itself from bottom-left to top-right */}
               <path
-                d={`M0,100 C ${55 * progress},100 ${88 * progress},${100 - 32 * progress} ${100 * progress},${100 - 96 * progress}`}
+                ref={pathRef}
+                d="M0,100 C 55,100 88,68 100,4"
                 fill="none"
                 stroke="url(#crashline)"
                 strokeWidth="3"
                 vectorEffect="non-scaling-stroke"
                 strokeLinecap="round"
+                pathLength={100}
+                strokeDasharray={100}
+                strokeDashoffset={100 - progress * 100}
                 style={{ filter: "drop-shadow(0 0 10px oklch(0.62 0.24 25))" }}
               />
             </svg>
@@ -197,8 +210,9 @@ function CrashPage() {
               aria-hidden
               className="absolute h-3.5 w-3.5 rounded-full bg-primary shadow-[0_0_18px_var(--primary-glow)] transition-opacity"
               style={{
-                left: `calc(${progress * 100}% - 7px)`,
-                bottom: `calc(${progress * 96}% - 7px)`,
+                left: `${tip.x}%`,
+                bottom: `${100 - tip.y}%`,
+                transform: "translate(-50%, 50%)",
                 opacity: target > 1 ? 1 : 0,
               }}
             />
