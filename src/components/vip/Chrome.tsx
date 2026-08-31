@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
 import logo from "@/assets/brand-mark.png";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/session";
@@ -16,12 +18,34 @@ export function DragonMark({ className, size = 40 }: { className?: string; size?
   );
 }
 
+export function BackButton({ className }: { className?: string }) {
+  const router = useRouter();
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        if (typeof window !== "undefined" && window.history.length > 1) router.history.back();
+        else router.navigate({ to: "/conditions" });
+      }}
+      aria-label="رجوع"
+      className={cn(
+        "flex items-center gap-1 rounded-full border border-border bg-secondary/50 px-2.5 py-1 text-[11px] text-foreground transition hover:bg-secondary",
+        className,
+      )}
+    >
+      <ChevronRight className="h-3.5 w-3.5" />
+      <span>رجوع</span>
+    </button>
+  );
+}
+
 export function TopBar({ title, right }: { title: string; right?: React.ReactNode }) {
   return (
     <header className="glass sticky top-0 z-40 flex items-center justify-between gap-2 px-3 py-2.5">
       <div className="flex items-center gap-2">
+        <BackButton />
         <DragonMark size={26} />
-        <span className="neon-text text-[11px] font-bold">{BRAND}</span>
+        <span className="neon-text hidden text-[11px] font-bold sm:inline">{BRAND}</span>
       </div>
       <h1 className="neon-text text-sm font-semibold">{title}</h1>
       <div className="min-w-[74px] text-left">{right}</div>
