@@ -7,19 +7,17 @@ import {
   Copy,
   Gamepad2,
   Lock,
-  Send,
   ShieldCheck,
   Sparkles,
   UserPlus,
   Wallet,
 } from "lucide-react";
 import imgDownload from "@/assets/cond-download.png";
-import imgTelegram from "@/assets/cond-telegram.png";
 import imgPromo from "@/assets/cond-promo.png";
 import imgDeposit from "@/assets/cond-deposit.png";
 import imgId from "@/assets/cond-id.png";
-import artPlane from "@/assets/art-plane.png";
-import artApple from "@/assets/art-apple.png";
+import logoCrash from "@/assets/logo-crash-game.png";
+import logoApple from "@/assets/logo-apple-game.png";
 import casinoBg from "@/assets/casino-bg.jpg";
 import xpLogo from "@/assets/xparibet-logo.jpg";
 import { OnlineUsers, Particles, TopBar } from "@/components/vip/Chrome";
@@ -48,8 +46,14 @@ export const Route = createFileRoute("/conditions")({
 type GameId = "crash" | "apple";
 
 const GAMES: { id: GameId; name: string; sub: string; img: string; to: "/crash" | "/apple" }[] = [
-  { id: "crash", name: "لعبة الطيارة", sub: "كاشف الأودد قبل الانفجار", img: artPlane, to: "/crash" },
-  { id: "apple", name: "لعبة التفاحة", sub: "كاشف الخانات الآمنة", img: artApple, to: "/apple" },
+  {
+    id: "crash",
+    name: "لعبة الطيارة",
+    sub: "كاشف الأودد قبل الانفجار",
+    img: logoCrash,
+    to: "/crash",
+  },
+  { id: "apple", name: "لعبة التفاحة", sub: "كاشف الخانات الآمنة", img: logoApple, to: "/apple" },
 ];
 
 function Step({
@@ -139,8 +143,8 @@ function ConditionsPage() {
     return () => clearTimeout(t);
   }, [loading, game, navigate]);
 
-  const total = 7;
-  const doneCount = 4 + (copied ? 1 : 0) + (id.trim() ? 1 : 0) + (game ? 1 : 0);
+  const total = 6;
+  const doneCount = 3 + (copied ? 1 : 0) + (id.trim() ? 1 : 0) + (game ? 1 : 0);
   const progress = Math.round((doneCount / total) * 100);
   const ready = !!id.trim() && !!game;
 
@@ -318,24 +322,6 @@ function ConditionsPage() {
             <Step
               n={5}
               delay={280}
-              image={imgTelegram}
-              title="قناة التلجرام"
-              desc="انضم لقناتنا الحصرية للحصول على التحديثات والإشارات اليومية."
-              done
-            >
-              <a
-                href={PLATFORM.telegram}
-                target="_blank"
-                rel="noreferrer"
-                className="sheen-on-hover flex items-center justify-center gap-1.5 rounded-2xl border border-primary/45 py-3 text-xs font-extrabold text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-[var(--glow-md)]"
-              >
-                <Send className="h-3.5 w-3.5" /> انضمام الآن
-              </a>
-            </Step>
-
-            <Step
-              n={6}
-              delay={350}
               image={imgId}
               title="الـ ID الخاص بك"
               desc="أدخل الـ ID الخاص بك في المنصة للتأكد من التفعيل."
@@ -351,10 +337,10 @@ function ConditionsPage() {
             </Step>
 
             <Step
-              n={7}
-              delay={420}
+              n={6}
+              delay={350}
               last
-              image={artApple}
+              image={logoApple}
               title="اختر اللعبة"
               desc="لازم تختار لعبة واحدة لتشغيل الكاشف الخاص بها."
               done={!!game}

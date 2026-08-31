@@ -5,7 +5,7 @@ import { DragonMark, Particles, TopBar } from "@/components/vip/Chrome";
 import { WinnersFeed } from "@/components/vip/WinnersFeed";
 import { getUserId, PLATFORM } from "@/lib/session";
 import { fetchCrashOdd, isVip } from "@/lib/firebase";
-import planeArt from "@/assets/art-plane.png";
+import planeArt from "@/assets/logo-crash-game.png";
 
 export const Route = createFileRoute("/crash")({
   head: () => ({
@@ -171,18 +171,16 @@ function CrashPage() {
                 style={{ filter: "drop-shadow(0 0 8px oklch(0.62 0.24 25))" }}
               />
             </svg>
-            <img
-              src={planeArt}
-              alt=""
+            <span
               aria-hidden
-              className="absolute h-11 w-11 object-contain drop-shadow-[0_0_14px_var(--primary-glow)] transition-transform duration-200"
+              className="absolute h-3 w-3 rounded-full bg-primary shadow-[0_0_16px_var(--primary-glow)] transition-opacity"
               style={{
-                left: `calc(${progress * 100}% - 22px)`,
-                bottom: `calc(${progress * 96}% - 16px)`,
-                opacity: target > 1 ? 1 : 0.35,
-                transform: `rotate(${running ? -8 : 0}deg) scale(${done ? 0.9 : 1})`,
+                left: `calc(${progress * 100}% - 6px)`,
+                bottom: `calc(${progress * 96}% - 6px)`,
+                opacity: target > 1 ? 1 : 0,
               }}
             />
+
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span
                 className={`neon-text text-5xl font-extrabold tabular-nums ${running ? "text-primary" : done ? "text-gold" : "text-foreground"}`}
