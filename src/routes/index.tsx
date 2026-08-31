@@ -1,8 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ShieldCheck, TerminalSquare } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { DragonMark, Particles } from "@/components/vip/Chrome";
 import { BRAND } from "@/lib/session";
+import xpLogo from "@/assets/xparibet-logo.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,14 +23,6 @@ export const Route = createFileRoute("/")({
   component: Splash,
 });
 
-const LOGS = [
-  "> بدء تشغيل النواة الآمنة",
-  "> فحص ثغرات التطبيقات",
-  "> تشفير الاتصال بالسيرفر",
-  "> تحميل خوارزمية الكشف",
-  "> الاتصال بمنصة Xparibet",
-  "> النظام جاهز",
-];
 
 function Splash() {
   const navigate = useNavigate();
@@ -52,7 +45,6 @@ function Splash() {
     return undefined;
   }, [progress, navigate]);
 
-  const shown = Math.min(LOGS.length, Math.max(1, Math.ceil((progress / 100) * LOGS.length)));
 
   return (
     <main
