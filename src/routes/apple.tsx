@@ -5,7 +5,6 @@ import appleLogo from "@/assets/logo-apple-game.png";
 import appleArt from "@/assets/art-apple.png";
 import rottenArt from "@/assets/art-rotten.png";
 import { DragonMark, Particles, TopBar } from "@/components/vip/Chrome";
-import { WinnersFeed } from "@/components/vip/WinnersFeed";
 import { getUserId, PLATFORM } from "@/lib/session";
 import { buildMatrix, fetchAppleMatrix, isVip, resetAppleMatrix, type Matrix } from "@/lib/firebase";
 
@@ -259,9 +258,6 @@ function ApplePage() {
             <DragonMark size={34} className="animate-breathe opacity-70" />
           </div>
 
-          <div className="mt-6 w-full">
-            <WinnersFeed title="Apple game live wins" />
-          </div>
         </div>
       </div>
     </main>
