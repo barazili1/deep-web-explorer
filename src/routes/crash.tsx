@@ -210,8 +210,9 @@ function CrashPage() {
               aria-hidden
               className="absolute h-3.5 w-3.5 rounded-full bg-primary shadow-[0_0_18px_var(--primary-glow)] transition-opacity"
               style={{
-                left: `calc(${progress * 100}% - 7px)`,
-                bottom: `calc(${progress * 96}% - 7px)`,
+                left: `${tip.x}%`,
+                bottom: `${100 - tip.y}%`,
+                transform: "translate(-50%, 50%)",
                 opacity: target > 1 ? 1 : 0,
               }}
             />
