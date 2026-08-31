@@ -1,38 +1,30 @@
-export type PlatformId = "fansport" | "greenbet";
+export type PlatformId = "xparibet";
 
-const KEY_PLATFORM = "dragonvip:platform";
-const KEY_ID = "dragonvip:userid";
+const KEY_ID = "appgaps:userid";
 
-export const PLATFORMS: Record<
-  PlatformId,
-  { name: string; tagline: string; accent: string; short: string; promo: string; link: string }
-> = {
-  fansport: {
-    name: "FANSPORT",
-    tagline: "المنصة العالمية الأولى",
-    accent: "oklch(0.55 0.2 250)",
-    short: "FS",
-    promo: "X200",
-    link: "https://lxzsdfgw.xyz/L?tag=d_5957194m_126154c_&site=5957194&ad=126154",
-  },
-  greenbet: {
-    name: "GREENBET",
-    tagline: "أرباح سريعة وسحب فوري",
-    accent: "oklch(0.7 0.2 150)",
-    short: "GB",
-    promo: "RG200",
-    link: "https://refpa79184.com/L?tag=d_5931379m_132250c_&site=5931379&ad=132250",
-  },
+export const BRAND = "ثغرات التطبيقات";
+
+export const PLATFORM = {
+  id: "xparibet" as PlatformId,
+  name: "Xparibet",
+  tagline: "المنصة الرسمية المعتمدة",
+  short: "XP",
+  promo: "FM333",
+  deposit: "220 جنيه أو 5 دولار",
+  download: "https://xp-aff.com/L?tag=d_4697360m_71587c_apk1&site=4697360&ad=71587",
+  register:
+    "https://xp-aff.com/L?tag=d_4697360m_64821c_site&site=4697360&ad=64821&r=registration",
+  telegram: "https://t.me/vbdhdvdv",
 };
 
-export function savePlatform(id: PlatformId) {
-  if (typeof window !== "undefined") sessionStorage.setItem(KEY_PLATFORM, id);
-}
+export const PLATFORMS: Record<PlatformId, typeof PLATFORM> = { xparibet: PLATFORM };
 
 export function getPlatform(): PlatformId {
-  if (typeof window === "undefined") return "fansport";
-  const v = sessionStorage.getItem(KEY_PLATFORM);
-  return v === "greenbet" ? "greenbet" : "fansport";
+  return "xparibet";
+}
+
+export function savePlatform(_id: PlatformId) {
+  /* single platform */
 }
 
 export function saveUserId(id: string) {
