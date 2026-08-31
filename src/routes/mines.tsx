@@ -9,9 +9,9 @@ import { getPlatform, getUserId, PLATFORMS } from "@/lib/session";
 export const Route = createFileRoute("/mines")({
   head: () => ({
     meta: [
-      { title: "كاشف Gems Mines — DARK WEB" },
+      { title: "كاشف Gems Mines — ثغرات التطبيقات" },
       { name: "description", content: "اكشف أماكن الألماس الآمنة في لعبة Gems Mines." },
-      { property: "og:title", content: "كاشف Gems Mines — DARK WEB" },
+      { property: "og:title", content: "كاشف Gems Mines — ثغرات التطبيقات" },
       { property: "og:description", content: "شبكة 5×5 لكشف الألماس الآمن." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
